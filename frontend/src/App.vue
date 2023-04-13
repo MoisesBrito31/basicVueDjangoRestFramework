@@ -1,15 +1,22 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div>
+    <div class="bg-danger">
+      <router-link to="/">Home</router-link>
+      <router-link to="/page1/">pagina 1</router-link>
+      <router-link to="/page2/">pagina 2</router-link>
+      <router-link to="/page3/">pagina 3</router-link>
+    </div>
+    <router-view></router-view>
+    
+  </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+
 
 export default {
-  name: 'App',
-  components: {
-    HelloWorld
+  name: 'App-v',
+  components: { 
   }
 }
 </script>
