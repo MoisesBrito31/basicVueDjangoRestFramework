@@ -1,10 +1,10 @@
 <template>
   <div>
-    <div class="bg-danger">
-      <router-link to="/">Home</router-link>
-      <router-link to="/page1/">pagina 1</router-link>
-      <router-link to="/page2/">pagina 2</router-link>
-      <router-link to="/page3/">pagina 3</router-link>
+    <div class="bg-info p-1">
+      <router-link class="p-2" to="/">Home</router-link>
+      <router-link class="p-2" to="/page1/">pagina 1</router-link>
+      <router-link class="p-2" to="/page2/">pagina 2</router-link>
+      <router-link class="p-2" to="/page3/">pagina 3</router-link>
     </div>
     <router-view></router-view>
     

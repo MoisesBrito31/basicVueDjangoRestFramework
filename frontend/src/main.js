@@ -1,6 +1,17 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 import Router from './router'
+import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
+//import { IconsPlugin } from 'bootstrap-vue'
 
+import 'bootstrap/dist/css/bootstrap.css';
+import 'bootstrap-vue/dist/bootstrap-vue.css';
 
-createApp(App).use(Router).mount('#app')
+const app = createApp(App)
+
+app.use(BootstrapVue)
+app.use(IconsPlugin)
+
+app.use(Router)
+
+app.mount('#app')

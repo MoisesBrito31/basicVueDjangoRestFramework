@@ -23,5 +23,5 @@ from OS.views import OsList, OsSerializer
 urlpatterns = [
     path('admin/', admin.site.urls),        
     path('',indexView.as_view(),name="index"),
-    path('os/',include('OS.urls'))
+    path('api/os/',include('OS.urls'))
 ]

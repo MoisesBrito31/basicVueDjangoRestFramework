@@ -5,16 +5,16 @@
     <p>essa pagina não precisa de acesso</p>
   </div>
     <img alt="Vue logo" src=".././assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <login dominio="http://localhost:8000/"></login>
   </div>
 </template>
   
   <script>
-  import HelloWorld from '.././components/HelloWorld.vue'
+  import login from '../components/loginToken.vue'
   export default {
     name: 'Home-v',
     components:{
-      HelloWorld
+      login
     }
   }
   </script>
