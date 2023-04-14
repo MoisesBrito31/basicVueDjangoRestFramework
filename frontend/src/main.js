@@ -1,17 +1,16 @@
-import { createApp } from 'vue'
+import Vue from 'vue'
 import App from './App.vue'
-import Router from './router'
+import router from './router'
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
-//import { IconsPlugin } from 'bootstrap-vue'
 
-import 'bootstrap/dist/css/bootstrap.css';
-import 'bootstrap-vue/dist/bootstrap-vue.css';
+import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap-vue/dist/bootstrap-vue.css'
 
-const app = createApp(App)
+Vue.use(BootstrapVue)
+Vue.use(IconsPlugin)
+Vue.config.productionTip = false
 
-app.use(BootstrapVue)
-app.use(IconsPlugin)
-
-app.use(Router)
-
-app.mount('#app')
+new Vue({
+  router,
+  render: h => h(App)
+}).$mount('#app')
