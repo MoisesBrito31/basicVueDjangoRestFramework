@@ -23,7 +23,7 @@ from OS.views import OsList, OsSerializer
 
 urlpatterns = [
     path('admin/', admin.site.urls),    
-    path('api-token-auth/', obtain_auth_token, name='api_token_auth'),    
+    path('token/', obtain_auth_token, name='api_token_auth'),    
     path('',indexView.as_view(),name="index"),
     path('api/os/',include('OS.urls'))
 ]

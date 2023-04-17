@@ -6,10 +6,20 @@
       <router-link class="p-1 m-1" to="/page1">PAgina 1</router-link>
       <router-link class="p-1 m-1" to="/page2">PAgina 2</router-link>
       <router-link class="p-1 m-1" to="/login">Logar</router-link>
+      <div>{{ contador }}</div>
     </nav>
     <router-view/>
   </div>
 </template>
+
+<script>
+import { mapGetters } from 'vuex';
+export default {
+  computed: {
+    ...mapGetters(['contador'])
+    },
+}
+</script>
 
 <style>
 #app {
