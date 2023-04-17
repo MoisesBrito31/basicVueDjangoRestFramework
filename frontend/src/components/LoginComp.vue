@@ -11,6 +11,7 @@
   </template>
   
   <script>
+  import { mapMutations } from 'vuex';
   export default {
     data() {
       return {
@@ -19,9 +20,8 @@
       };
     },
     methods: {
+      ...mapMutations(['logar']),
       async login() {
-        this.$setCookie('')
-        alert(this.$getCookie('csrftoken'))
         try {
           const response = await fetch('http://localhost:8000/token/', {
             method: 'POST',
@@ -36,7 +36,8 @@
   
           if (response.ok) {
             const data = await response.json();
-            localStorage.setItem('token', data.token);
+            this.logar(data.token);
+            this.$setCookie('token',data.token);
             this.$router.push('/');
           } else {
             console.error('Erro ao fazer login');

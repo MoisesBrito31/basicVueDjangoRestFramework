@@ -5,20 +5,25 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    contador: 0
+      logado: false,
+      nome: 'Desconhecido',
+      token: '',
+      avatar: '',
   },
   getters: {	  
-    contador(state){
-      return state.contador
+    logado(state){
+      return state.logado
     }
   },
   mutations: {	
-    soma(state){
-      state.contador++
+    logar(state,token){
+      state.logado = true
+      state.token = token
     },
-    sub(state){
-      state.contador--
-    }  
+    logout(state){
+      state.logado = false
+      state.token = ''
+    }
   },
   actions: {
   },
