@@ -48,7 +48,6 @@ Vue.prototype.$apagaCookies = function() {
 },
 
 
-
 new Vue({
   router,
   store,
