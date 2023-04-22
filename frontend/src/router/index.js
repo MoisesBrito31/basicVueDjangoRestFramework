@@ -8,6 +8,22 @@ import store from '@/store'
 
 Vue.use(VueRouter)
 
+function getCookie(name) {
+  let cookieValue = null;
+  if (document.cookie && document.cookie !== '') {
+      const cookies = document.cookie.split(';');
+      for (let i = 0; i < cookies.length; i++) {
+          const cookie = cookies[i].trim();
+          // Does this cookie string begin with the name we want?
+          if (cookie.substring(0, name.length + 1) === (name + '=')) {
+              cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+              break;
+          }
+      }
+  }
+  return cookieValue;
+}
+
 const routes = [
   {
     path: '/',
@@ -35,6 +51,14 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
+  try{
+    const token = getCookie('token')
+    if(token == null){ throw new Error('token inexistente');}
+    store.commit('logar',token)
+  }catch(erro){
+    store.commit('logout')
+    console.log(erro)
+  }
   if (to.matched.some(record => record.meta.requiresAuth)) {
     if (!store.getters.logado) {
       next('/login');

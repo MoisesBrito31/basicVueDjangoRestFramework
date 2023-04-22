@@ -12,6 +12,7 @@
   
   <script>
   import { mapMutations } from 'vuex';
+  import { mapGetters } from 'vuex';
   export default {
     data() {
       return {
@@ -19,11 +20,12 @@
         password: ''
       };
     },
+    computed:{...mapGetters(['getDominio'])},
     methods: {
       ...mapMutations(['logar']),
       async login() {
         try {
-          const response = await fetch('http://localhost:8000/token/', {
+          const response = await fetch(`${this.getDominio}/token/`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json'

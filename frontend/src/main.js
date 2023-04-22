@@ -51,6 +51,5 @@ Vue.prototype.$apagaCookies = function() {
 new Vue({
   router,
   store,
-  delimiters: ['{$', '$}'],
   render: h => h(App)
 }).$mount('#app')
