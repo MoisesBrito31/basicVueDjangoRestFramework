@@ -1,5 +1,5 @@
 import Home from '@/views/HomeView.vue'
-import Page1 from '@/views/Page1View.vue'
+import dataView from '@/views/data-View.vue'
 import Page2 from '@/views/Page2View.vue'
 import Login from '@/views/LoginView.vue'
 import Vue from 'vue'
@@ -31,7 +31,7 @@ const routes = [
   },
   {
     path: '/page1',
-    component: Page1,
+    component: dataView,
     meta: { requiresAuth: true }
   },
   {
@@ -57,7 +57,6 @@ router.beforeEach((to, from, next) => {
     store.commit('logar',token)
   }catch(erro){
     store.commit('logout')
-    console.log(erro)
   }
   if (to.matched.some(record => record.meta.requiresAuth)) {
     if (!store.getters.logado) {
