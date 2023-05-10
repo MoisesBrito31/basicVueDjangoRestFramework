@@ -1,35 +1,37 @@
 <template>
     <div>
-        <div class="card-header mb-3">
-            <h4> Cadastro de OS</h4>
-        </div>
-        <b-form>
-            <b-form-group label="Cliente:" :state="clienteOK"  invalid-feedback="Não pode ser Vazio">
-            <b-input-group>
-                <b-form-input :state="clienteOK" 
-                    type="text" placeholder="Fabricante" v-model="obj.name" trim >
-                </b-form-input>
-            </b-input-group>
-        </b-form-group>
-        <b-form-group label="Serviço:" :state="serviceOK"  invalid-feedback="Não pode ser Vazio">
-            <b-input-group>
-                <b-form-input :state="serviceOK" 
-                    type="text" placeholder="Serviço" v-model="obj.description" trim >
-                </b-form-input>
-            </b-input-group>
-        </b-form-group>
-        
-        <b-form-group class="mt-3 pt-3" >
-            <b-button @click="postDadosOS" v-bind:class="{disabled:!podeCadastrar}"  block variant="primary">
-                <span v-show="espera">
-                <b-spinner type="grow" variant="light"></b-spinner>
-                <b-spinner type="grow" variant="light"></b-spinner>
-                <b-spinner type="grow" variant="light"></b-spinner>
-               </span>
-               <span v-show="!espera">Cadastrar</span>
-            </b-button>
-        </b-form-group>
-        </b-form>
+        <b-overlay rounded="sm" :show="esperandoDados">
+            <div class="card-header mb-3">
+                <h4> Edição de {{ obj.name }}</h4>
+            </div>
+            <b-form>
+                <b-form-group label="Cliente:" :state="clienteOK"  invalid-feedback="Não pode ser Vazio">
+                <b-input-group>
+                    <b-form-input :state="clienteOK" 
+                        type="text" placeholder="Fabricante" v-model="obj.name" trim >
+                    </b-form-input>
+                </b-input-group>
+            </b-form-group>
+            <b-form-group label="Serviço:" :state="serviceOK"  invalid-feedback="Não pode ser Vazio">
+                <b-input-group>
+                    <b-form-input :state="serviceOK" 
+                        type="text" placeholder="Serviço" v-model="obj.description" trim >
+                    </b-form-input>
+                </b-input-group>
+            </b-form-group>
+            
+            <b-form-group class="mt-3 pt-3" >
+                <b-button @click="postDadosOS" v-bind:class="{disabled:!podeCadastrar}"  block variant="primary">
+                    <span v-show="espera">
+                    <b-spinner type="grow" variant="light"></b-spinner>
+                    <b-spinner type="grow" variant="light"></b-spinner>
+                    <b-spinner type="grow" variant="light"></b-spinner>
+                </span>
+                <span v-show="!espera">Salvar</span>
+                </b-button>
+            </b-form-group>
+            </b-form>
+        </b-overlay>
         <div>
           <!--Alerta de falha-->
           <b-alert
@@ -55,6 +57,9 @@
 import { mapGetters } from 'vuex'
 export default {
   name: 'data-Add',
+  created(){
+    this.getDadosOS()
+  },
   data(){
     return{
         alertaFalha:{
@@ -65,6 +70,7 @@ export default {
         modalVisible:false,
         erroMsg : '',
         espera:false,
+        esperandoDados:false,
         falha: false,
         obj:{'name':'','description':''}
     }
@@ -87,12 +93,7 @@ export default {
       this.alertaFalha.time = valor
     },
     mostarMsgOK(){
-      this.$bvToast.toast('Criado!!!', {
-            title: "Bem Sucedido",
-            variant: "success",
-            solid: true
-          })
-      this.obj = {'name':'','description':''}
+        this.$emit("editado")
     },
     dataFormat(){
             //const form = document.getElementById('img')
@@ -108,7 +109,7 @@ export default {
         this.espera=true
         try{
         this.esperando = true
-          const response = await fetch(`${this.getDominio}/api/os/`,{
+          const response = await fetch(`${this.getDominio}/api/os/${this.id}/`,{
             method:"POST",
             headers:{
             'Authorization': `Token ${this.getToken}`
@@ -133,8 +134,38 @@ export default {
         this.espera = false
       }
        
-    }
+    },
+    async getDadosOS(){
+      try{
+        this.esperandoDados = true
+          const response = await fetch(`${this.getDominio}/api/os/${this.id}/`,{
+          headers:{
+            'Authorization': `Token ${this.getToken}`
+          }
+        })
+        if(response.ok){
+          const data = await response.json()
+          this.esperandoDados = false
+          this.obj = data
+        }else{
+          switch(response.status){
+            case 401:
+              throw new Error('Não Autorizado');
+            case 404:
+              throw new Error('Não Encontrado');
+            default:
+              throw new Error('Falha interna no Servidor');
+          }
+        }
+      }catch(error){
+        this.alertaFalha.msg= error
+        this.alertaFalha.time= this.alertaFalha.startTime
+        this.esperandoDados = false
+      }
+    },
 
+  },props:{
+    id:{type: Number,  required:false,}
   }
 
 }

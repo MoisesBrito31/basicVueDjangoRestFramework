@@ -20,6 +20,16 @@
         </div>
       </b-modal>
 
+      <b-modal v-model="modalEditVisible" centered ok-only 
+        title="Cadastrar"
+        @close="getDadosOS"
+        @ok="getDadosOS"
+      >
+        <div class="d-flex flex-column align-items-center">
+          <dataEdit @editado="editado" :id="editIndex" ></dataEdit>
+        </div>
+      </b-modal>
+
       <h3>Pagina 1</h3>
       <p>essa pagina precisa de login</p>
       <b-overlay rounded="sm" :show="esperando">
@@ -36,15 +46,19 @@
 import { mapGetters } from 'vuex'
 import dataTable from '@/components/data-Table.vue';
 import dataAdd from '@/components/data-Add.vue'
+import dataEdit from '@/components/data-Edit.vue';
 export default {
   components:{
     dataTable,
-    dataAdd
+    dataAdd,
+    dataEdit
   },
   data(){    
     return {
       modalVisible:false,
       modalAddVisible:false,
+      modalEditVisible:false,
+      editIndex:0,
       erroMsg:'',
       act: [1,1,1], //novo,edit,apaga
       esperando: false,
@@ -72,10 +86,20 @@ export default {
       this.modalAddVisible = true
     },
     chamaEdit(valor){
-      alert(`chamar o data-edit de id: ${valor}`)
+      this.modalEditVisible = true
+      this.editIndex=valor
     },
     chamaDel(valor){
       this.deleteOS(valor)
+    },
+    editado(){
+      this.$bvToast.toast('Editado!!!', {
+            title: "Bem Sucedido",
+            variant: "success",
+            solid: true
+          })
+      this.modalEditVisible=false
+      this.getDadosOS()
     },
     async getDadosOS(){
       try{

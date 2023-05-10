@@ -4,6 +4,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from .serializer import OsSerializer
 from .models import OS
+from time import sleep
 
 class OsList(APIView):
     permission_classes=[IsAuthenticated]
@@ -21,6 +22,22 @@ class OsList(APIView):
 
 class OsDetail(APIView):  
     permission_classes=[IsAuthenticated]
+    def get(self,request,pk):
+        try:
+            obj = OS.objects.get(id=pk)
+            serial = OsSerializer(obj)
+            sleep(5)
+            return Response(serial.data)
+        except Exception as EX:
+            return Response(str(EX),status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    def post(self,request,pk):
+        obj = OS.objects.get(id=pk)
+        serial = OsSerializer(obj,data=request.data)
+        if serial.is_valid():
+            serial.save()
+            sleep(5)
+            return Response(serial.data, status=status.HTTP_201_CREATED)
+        return Response(serial.errors, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     def delete(self, request, pk):
         try:
             obj = OS.objects.get(id=pk)
