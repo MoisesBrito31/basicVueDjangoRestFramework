@@ -10,7 +10,11 @@
         </div>
       </b-modal>
 
-      <b-modal v-model="modalAddVisible" centered ok-only title="CAdastrar">
+      <b-modal v-model="modalAddVisible" centered ok-only 
+        title="Cadastrar"
+        @close="getDadosOS"
+        @ok="getDadosOS"
+      >
         <div class="d-flex flex-column align-items-center">
           <dataAdd></dataAdd>
         </div>
@@ -71,7 +75,7 @@ export default {
       alert(`chamar o data-edit de id: ${valor}`)
     },
     chamaDel(valor){
-      alert(`chamar o deletar de id: ${valor}`)
+      this.deleteOS(valor)
     },
     async getDadosOS(){
       try{
@@ -86,6 +90,43 @@ export default {
           this.esperando = false
           this.data = data
           this.falha = false
+        }else{
+          switch(response.status){
+            case 401:
+              throw new Error('Não Autorizado');
+            case 404:
+              throw new Error('Não Encontrado');
+            default:
+              throw new Error('Falha interna no Servidor');
+          }
+        }
+      }catch(error){
+        this.modalVisible = true
+        this.erroMsg = error
+        this.falha = true
+        this.esperando = false
+      }
+    },
+    async deleteOS(id){
+      try{
+        this.esperando = true
+          const response = await fetch(`${this.getDominio}/api/os/${id}/`,{
+            method:"DELETE",
+          headers:{
+            'Authorization': `Token ${this.getToken}`,
+            'X-CSRFToken': this.$getCookie('csrftoken')
+          }
+        })
+        if(response.ok){
+          this.esperando = false
+          this.falha = false
+          this.getDadosOS()
+          this.$bvToast.toast('Apagado Com Sucesso', {
+            title: "Bem Sucedido",
+            variant: "success",
+            solid: true
+          })
+          
         }else{
           switch(response.status){
             case 401:

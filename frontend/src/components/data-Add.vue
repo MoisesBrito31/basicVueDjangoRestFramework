@@ -14,13 +14,13 @@
         <b-form-group label="Serviço:" :state="serviceOK"  invalid-feedback="Não pode ser Vazio">
             <b-input-group>
                 <b-form-input :state="serviceOK" 
-                    type="text" placeholder="Serviço" v-model="obj.descpition" trim >
+                    type="text" placeholder="Serviço" v-model="obj.description" trim >
                 </b-form-input>
             </b-input-group>
         </b-form-group>
-
-        <b-form-group class="mt-3 pt-3 bg-danger" >
-            <b-button @click="putDadosOS" v-bind:class="{disabled:!podeCadastrar}"  block variant="primary">
+        
+        <b-form-group class="mt-3 pt-3" >
+            <b-button @click="postDadosOS" v-bind:class="{disabled:!podeCadastrar}"  block variant="primary">
                 <span v-show="espera">
                 <b-spinner type="grow" variant="light"></b-spinner>
                 <b-spinner type="grow" variant="light"></b-spinner>
@@ -30,27 +30,72 @@
             </b-button>
         </b-form-group>
         </b-form>
+        <div>
+          <!--Alerta de falha-->
+          <b-alert
+            :show="alertaFalha.time"
+            dismissible
+            variant="danger"
+            @dismissed="alertaFalha.time=0"
+            @dismiss-count-down="alertaFalhaTick"
+          >
+            <p>{{ alertaFalha.msg }}</p>
+            <b-progress
+              variant="danger"
+              :max="alertaFalha.startTime"
+              :value="alertaFalha.time"
+              height="4px"
+            ></b-progress>
+          </b-alert>
+          <!--Alerta de dados salvos-->
+          <b-alert
+            :show="alertaOK.time"
+            dismissible
+            variant="success"
+            @dismissed="alertaOK.time=0"
+            @dismiss-count-down="alertaOKTick"
+          >
+            <p>Cadastrado !</p>
+            <b-progress
+              variant="success"
+              :max="alertaOK.startTime"
+              :value="alertaOK.time"
+              height="4px"
+            ></b-progress>
+          </b-alert>
+        </div>
     </div>
 </template>
 
 <script lang="js">
+import { mapGetters } from 'vuex'
 export default {
   name: 'data-Add',
   data(){
     return{
+        alertaOK:{
+          'startTime':10,
+          'time':0
+        },
+        alertaFalha:{
+          'startTime':10,
+          'time':0,
+          'msg':''
+        },
         modalVisible:false,
         erroMsg : '',
         espera:false,
         falha: false,
-        obj:{'name':'','descpition':''}
+        obj:{'name':'','description':''}
     }
   },computed:{
+    ...mapGetters(['getDominio','getToken']),
     clienteOK(){
         if(this.obj.name.length>0){return true}
         else{return false}
     },
     serviceOK(){
-        if(this.obj.descpition.length>0){return true}
+        if(this.obj.description.length>0){return true}
         else{return false}
     },
     podeCadastrar(){
@@ -58,6 +103,16 @@ export default {
         else{ return false}
     }
   },methods:{
+    alertaOKTick(valor){
+      this.alertaOK.time = valor
+    },
+    alertaFalhaTick(valor){
+      this.alertaFalha.time = valor
+    },
+    mostarMsgOK(){
+      this.alertaOK.time = this.alertaOK.startTime
+      this.obj = {'name':'','description':''}
+    },
     dataFormat(){
             //const form = document.getElementById('img')
             //const file = form.files[0]
@@ -65,22 +120,22 @@ export default {
             //if(file!==undefined){formdata.append('img',file,file.name)}
             //if(this.obj.id!==undefined){formdata.append('id',this.obj.id)}
             formdata.append('name',this.obj.name)
-            formdata.append('descpition',this.obj.descpition)
+            formdata.append('description',this.obj.description)
             return formdata
     },
-    async putDadosOS(){
+    async postDadosOS(){
         this.espera=true
         try{
         this.esperando = true
           const response = await fetch(`${this.getDominio}/api/os/`,{
-            method:"PUT",
+            method:"POST",
             headers:{
             'Authorization': `Token ${this.getToken}`
           },body:this.dataFormat()
         })
         if(response.ok){
+          this.mostarMsgOK()
           this.espera = false
-          this.falha = false
         }else{
           switch(response.status){
             case 401:
@@ -92,9 +147,8 @@ export default {
           }
         }
       }catch(error){
-        this.modalVisible = true
-        this.erroMsg = error
-        this.falha = true
+        this.alertaFalha.msg= error
+        this.alertaFalha.time= this.alertaFalha.startTime
         this.espera = false
       }
        
