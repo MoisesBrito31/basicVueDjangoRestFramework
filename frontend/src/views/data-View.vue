@@ -10,10 +10,20 @@
         </div>
       </b-modal>
 
+      <b-modal v-model="modalAddVisible" centered ok-only title="CAdastrar">
+        <div class="d-flex flex-column align-items-center">
+          <dataAdd></dataAdd>
+        </div>
+      </b-modal>
+
       <h3>Pagina 1</h3>
       <p>essa pagina precisa de login</p>
       <b-overlay rounded="sm" :show="esperando">
-        <dataTable :actions="act" :items="data" :fields="fields"></dataTable> 
+        <dataTable :actions="act" :items="data" :fields="fields"
+          @novo="chamaAdd"
+          @editar="chamaEdit"
+          @apagar = "chamaDel"
+        ></dataTable> 
       </b-overlay>
     </div>
 </template>
@@ -21,13 +31,16 @@
 <script>
 import { mapGetters } from 'vuex'
 import dataTable from '@/components/data-Table.vue';
+import dataAdd from '@/components/data-Add.vue'
 export default {
   components:{
-    dataTable
+    dataTable,
+    dataAdd
   },
   data(){    
     return {
       modalVisible:false,
+      modalAddVisible:false,
       erroMsg:'',
       act: [1,1,1], //novo,edit,apaga
       esperando: false,
@@ -50,6 +63,15 @@ export default {
   methods:{
     informe(valor){
       alert(valor)
+    },
+    chamaAdd(){
+      this.modalAddVisible = true
+    },
+    chamaEdit(valor){
+      alert(`chamar o data-edit de id: ${valor}`)
+    },
+    chamaDel(valor){
+      alert(`chamar o deletar de id: ${valor}`)
     },
     async getDadosOS(){
       try{
