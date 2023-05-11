@@ -29,9 +29,9 @@
           <dataEdit @editado="editado" :id="editIndex" ></dataEdit>
         </div>
       </b-modal>
-
-      <h3>Pagina 1</h3>
-      <p>essa pagina precisa de login</p>
+      <div class="m-auto p-5">
+        <h3>Gestão de OS</h3>
+      </div>
       <b-overlay rounded="sm" :show="esperando">
         <dataTable :actions="act" :items="data" :fields="fields"
           @novo="chamaAdd"

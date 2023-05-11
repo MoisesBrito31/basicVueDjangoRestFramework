@@ -26,7 +26,6 @@ class OsDetail(APIView):
         try:
             obj = OS.objects.get(id=pk)
             serial = OsSerializer(obj)
-            sleep(5)
             return Response(serial.data)
         except Exception as EX:
             return Response(str(EX),status=status.HTTP_500_INTERNAL_SERVER_ERROR)
@@ -35,7 +34,6 @@ class OsDetail(APIView):
         serial = OsSerializer(obj,data=request.data)
         if serial.is_valid():
             serial.save()
-            sleep(5)
             return Response(serial.data, status=status.HTTP_201_CREATED)
         return Response(serial.errors, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     def delete(self, request, pk):

@@ -3,26 +3,11 @@ import dataView from '@/views/data-View.vue'
 import Page2 from '@/views/Page2View.vue'
 import Login from '@/views/LoginView.vue'
 import Vue from 'vue'
+import Cookies from 'js-cookie'
 import VueRouter from 'vue-router'
 import store from '@/store'
 
 Vue.use(VueRouter)
-
-function getCookie(name) {
-  let cookieValue = null;
-  if (document.cookie && document.cookie !== '') {
-      const cookies = document.cookie.split(';');
-      for (let i = 0; i < cookies.length; i++) {
-          const cookie = cookies[i].trim();
-          // Does this cookie string begin with the name we want?
-          if (cookie.substring(0, name.length + 1) === (name + '=')) {
-              cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-              break;
-          }
-      }
-  }
-  return cookieValue;
-}
 
 const routes = [
   {
@@ -52,7 +37,7 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   try{
-    const token = getCookie('token')
+    const token = Cookies.get('token')
     if(token == null){ throw new Error('token inexistente');}
     store.commit('logar',token)
   }catch(erro){

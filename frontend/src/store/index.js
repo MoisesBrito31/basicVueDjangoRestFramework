@@ -8,6 +8,7 @@ export default new Vuex.Store({
       dominio: 'http://localhost:8000',
       logado: false,
       nome: 'Desconhecido',
+      usuarioAlertas:0,
       token: '',
       avatar: '',
   },
@@ -15,6 +16,9 @@ export default new Vuex.Store({
     logado(state){
       return state.logado
     },
+    getName(state){return state.nome},
+    getAlertas(state){return state.usuarioAlertas},
+    getAvatar(state){return state.avatar},
     getToken(state){return state.token},
     getDominio(state){return state.dominio}
   },

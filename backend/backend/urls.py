@@ -17,13 +17,14 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include, re_path
 from rest_framework.authtoken.views import obtain_auth_token
-from .views import indexView
+from .views import indexView, logout
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),    
     path('token/', obtain_auth_token, name='api_token_auth'),    
     path('',indexView.as_view(),name="index"),
+    path('logout/',logout.as_view(),name="logout"),
     path('api/os/',include('OS.urls')),
     re_path(r'^.*$', indexView.as_view())
 ]

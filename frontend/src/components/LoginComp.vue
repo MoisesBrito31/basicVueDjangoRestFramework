@@ -13,6 +13,7 @@
   <script>
   import { mapMutations } from 'vuex';
   import { mapGetters } from 'vuex';
+  import Cookies from 'js-cookie'
   export default {
     data() {
       return {
@@ -39,7 +40,7 @@
           if (response.ok) {
             const data = await response.json();
             this.logar(data.token);
-            this.$setCookie('token',data.token);
+            Cookies.set('token',data.token);
             this.$router.push('/');
           } else {
             console.error('Erro ao fazer login');
