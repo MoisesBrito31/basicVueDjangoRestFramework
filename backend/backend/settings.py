@@ -38,10 +38,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'stdimage',
     'corsheaders',
     'rest_framework',
     'rest_framework.authtoken',
-    'OS'
+    'user',
+    'OS',
 ]
 
 MIDDLEWARE = [
@@ -141,4 +143,10 @@ STATICFILES_DIRS = [
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR,'media')
+
+AUTH_USER_MODEL = 'user.Usuario'
+
 CORS_ORIGIN_ALLOW_ALL = True
+

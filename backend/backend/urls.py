@@ -16,15 +16,19 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include, re_path
+from django.conf.urls.static import static
+from django.conf import settings
 from rest_framework.authtoken.views import obtain_auth_token
-from .views import indexView, logout
+from OS.views import indexView
 
 
 urlpatterns = [
-    path('admin/', admin.site.urls),    
-    path('token/', obtain_auth_token, name='api_token_auth'),    
-    path('',indexView.as_view(),name="index"),
-    path('logout/',logout.as_view(),name="logout"),
+    path('admin/', admin.site.urls),
+    path('',indexView.as_view(),name="index"),  
+    path('user/', include('user.urls')),
     path('api/os/',include('OS.urls')),
-    re_path(r'^.*$', indexView.as_view())
-]
+    #re_path(r'^.*$', indexView.as_view())
+]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+handler404 = "OS.views.index404"
+handler500 = "OS.views.index500"

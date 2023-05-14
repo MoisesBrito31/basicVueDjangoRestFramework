@@ -1,3 +1,5 @@
+from django.shortcuts import render
+from django.views.generic import View
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
@@ -5,6 +7,17 @@ from rest_framework.response import Response
 from .serializer import OsSerializer
 from .models import OS
 from time import sleep
+
+
+class indexView(View):
+    def get(self,request):
+        return render(request,"index.html")
+    
+def index404(request,erro):
+    return render(request,"index.html")
+
+def index500(request):
+    return render(request,"index.html")
 
 class OsList(APIView):
     permission_classes=[IsAuthenticated]
