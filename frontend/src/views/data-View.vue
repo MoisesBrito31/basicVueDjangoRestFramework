@@ -131,6 +131,7 @@ export default {
         this.esperando = false
       }
     },
+   
     async deleteOS(id){
       try{
         this.esperando = true
@@ -138,7 +139,6 @@ export default {
             method:"DELETE",
           headers:{
             'Authorization': `Token ${this.getToken}`,
-            'X-CSRFToken': this.$getCookie('csrftoken')
           }
         })
         if(response.ok){

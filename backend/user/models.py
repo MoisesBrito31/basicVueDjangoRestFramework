@@ -14,6 +14,7 @@ class Usuario(AbstractUser):
         'menu': {'width':100,'height':100, 'crop': True},
         'post': {'width':200,'height':200, 'crop': True}
     },delete_orphans=True,default="")
+    alertasNovos = models.IntegerField('alertas não lidos',default=0)
 
     def __str__(self):
         return self.username

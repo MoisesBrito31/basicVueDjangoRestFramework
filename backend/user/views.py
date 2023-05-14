@@ -11,10 +11,12 @@ from .serializer import UsuarioSerializer
 def getUserData(request):
     try:
         user = request.user
-        print(f'tipo: {type(user)}, dados:{user}')
-        print(user.username)
-        serial = UsuarioSerializer(user)
-        data = serial.data
+        serial =UsuarioSerializer(user)
+        data = {
+            'name':serial.data['username'],
+            'avatar':serial.data['avatar'],
+            'alertas':str(serial.data['alertasNovos']),
+        }
     except Exception as EX:
         data = {
             'valor': '',

@@ -30,7 +30,10 @@ export default new Vuex.Store({
     logout(state){
       state.logado = false
       state.token = ''
-    }
+    },
+    setUser(state,name){state.nome = name},
+    setAvatar(state,avatar){state.avatar=avatar},
+    setAlertas(state,alerta){state.usuarioAlertas=alerta}
   },
   actions: {
   },

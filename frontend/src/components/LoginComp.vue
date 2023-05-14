@@ -96,7 +96,7 @@
       async login() {
         try {
           this.espera = true
-          const response = await fetch(`${this.getDominio}/token/`, {
+          const response = await fetch(`${this.getDominio}${this.rota}`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json'
@@ -128,6 +128,9 @@
           console.error(error);
         }
       },
+    },
+    props:{
+      rota:{'type':String}
     }
   };
   </script>

@@ -2,7 +2,7 @@
     <div class="mt-5">
         <h1>login de Usuario</h1>
         <div class="m-auto text-left" style="max-width: 400px">   
-            <Login @logou="logou"></Login>
+            <Login @logou="logou" rota="/user/token/"></Login>
         </div>
     </div>
 </template>
