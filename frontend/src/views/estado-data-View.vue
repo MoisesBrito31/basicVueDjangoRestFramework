@@ -30,7 +30,7 @@
         </div>
       </b-modal>
       <div class="m-auto p-5">
-        <h3>Gestão de OS</h3>
+        <h3>Gestão de Estado</h3>
       </div>
       <b-overlay rounded="sm" :show="esperando">
         <dataTable :actions="act" :items="data" :fields="fields"
@@ -44,9 +44,9 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import dataTable from '@/components/data-Table.vue';
-import dataAdd from '@/components/data-Add.vue'
-import dataEdit from '@/components/data-Edit.vue';
+import dataTable from '@/components/estado/data-Table.vue';
+import dataAdd from '@/components/estado/data-Add.vue'
+import dataEdit from '@/components/estado/data-Edit.vue';
 export default {
   components:{
     dataTable,
@@ -66,8 +66,8 @@ export default {
       data:[], // data precisa ter a key action se não não libera ferramentas
       fields:[
         {key:'id'},
-        {key:'name',label:'Cliete',sortable:true},
-        {key:'description',label:'Trabalho',sortable:true},
+        {key:'name',label:'Estado',sortable:true},
+        {key:'color',label:'cor',sortable:true},
         {key:'action',label:'ação'}
       ]
     }
@@ -104,7 +104,7 @@ export default {
     async getDadosOS(){
       try{
         this.esperando = true
-          const response = await fetch(`${this.getDominio}/api/os/`,{
+          const response = await fetch(`${this.getDominio}/api/os/estado/`,{
           headers:{
             'Authorization': `Token ${this.getToken}`
           }
@@ -135,7 +135,7 @@ export default {
     async deleteOS(id){
       try{
         this.esperando = true
-          const response = await fetch(`${this.getDominio}/api/os/${id}/`,{
+          const response = await fetch(`${this.getDominio}/api/os/estado/${id}/`,{
             method:"DELETE",
           headers:{
             'Authorization': `Token ${this.getToken}`,

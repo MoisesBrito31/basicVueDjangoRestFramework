@@ -29,6 +29,9 @@
     :fields=fields 
     :filter=filtro
     head-variant="dark">
+    <template #cell(color)="row">
+        <b-form-input  type="color" v-bind:value="row.item.color" disabled="true"></b-form-input>
+    </template>
     <template #cell(action)="row">
         <b-button v-if="temEdit" type="button" size="sm" @click="edita(row.item.id)" class="mr-1">
          Editar 
@@ -47,6 +50,7 @@ export default {
   name: 'data-Table',
   data(){
     return{
+        cor:"",
         showModalDel:false,
         apagarAlvo:{'id':0,'info':'nenhum'},
         filtro: '',

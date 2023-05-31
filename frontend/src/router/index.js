@@ -1,6 +1,6 @@
 import Home from '@/views/HomeView.vue'
-import dataView from '@/views/data-View.vue'
-import Page2 from '@/views/Page2View.vue'
+import dataView from '@/views/os-data-View.vue'
+import estado from '@/views/estado-data-View.vue'
 import Login from '@/views/LoginView.vue'
 import Vue from 'vue'
 import Cookies from 'js-cookie'
@@ -21,7 +21,7 @@ const routes = [
   },
   {
     path: '/page2',
-    component: Page2,
+    component: estado,
     meta: { requiresAuth: true }
   },
   {
