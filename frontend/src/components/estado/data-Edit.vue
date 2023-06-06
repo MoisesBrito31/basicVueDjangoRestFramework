@@ -98,7 +98,8 @@ export default {
             //if(file!==undefined){formdata.append('img',file,file.name)}
             //if(this.obj.id!==undefined){formdata.append('id',this.obj.id)}
             formdata.append('name',this.obj.name)
-            formdata.append('description',this.obj.description)
+            formdata.append('color',this.obj.color)
+            formdata.append('colorHTML',`color:${this.obj.color};`)
             return formdata
     },
     async postDadosOS(){

@@ -30,10 +30,11 @@
     :filter=filtro
     head-variant="dark">
     <template #cell(state)="stado">
-        <div v-bind:color="stado.item.state.color">
-            {{ stado.item.state.id }} &
-            {{ stado.item.state.name }} & {{ stado.item.state.color }}</div>
+            <div v-bind:id="stado.item.id" v-bind:style="stado.item.state.colorHTML"> 
+                {{ stado.item.state.name }} 
+            </div>
     </template>
+    <!--
     <template #cell(action)="row">
         <b-button v-if="temEdit" type="button" size="sm" @click="edita(row.item.id)" class="mr-1">
          Editar 
@@ -41,7 +42,7 @@
         <b-button v-if="temRemove" type="button" size="sm" @click="apaga(row.item.id)">
           Apagar
         </b-button>
-    </template>
+    </template>-->
 
     </b-table>
 </div>
@@ -60,6 +61,9 @@ export default {
     }
   },
   methods:{
+    teste(valor){
+        alert(valor)
+    },
     adiciona(){
         this.$emit("novo")
     },

@@ -98,6 +98,7 @@ export default {
             //if(this.obj.id!==undefined){formdata.append('id',this.obj.id)}
             formdata.append('name',this.obj.name)
             formdata.append('color',this.obj.color)
+            formdata.append('colorHTML',`color:${this.obj.color};`)
             return formdata
     },
     async postDadosOS(){

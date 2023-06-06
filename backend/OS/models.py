@@ -3,8 +3,8 @@ from django.db import models
 
 class Estado(models.Model):
     name = models.CharField("nome",max_length=100)
-    color = models.CharField("cor",max_length=8,default="FF0000")
-
+    color = models.CharField("cor",max_length=8,default="#FF0000")
+    colorHTML = models.CharField("cor html",max_length=50,default="color:#FF0000;")
     class Meta:
         verbose_name = 'Estado'
         verbose_name_plural = 'Estados'
