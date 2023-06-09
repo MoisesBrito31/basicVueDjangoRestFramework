@@ -34,7 +34,6 @@
                 {{ stado.item.state.name }} 
             </div>
     </template>
-    <!--
     <template #cell(action)="row">
         <b-button v-if="temEdit" type="button" size="sm" @click="edita(row.item.id)" class="mr-1">
          Editar 
@@ -42,8 +41,7 @@
         <b-button v-if="temRemove" type="button" size="sm" @click="apaga(row.item.id)">
           Apagar
         </b-button>
-    </template>-->
-
+    </template>
     </b-table>
 </div>
 </template>

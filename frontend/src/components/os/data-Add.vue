@@ -1,5 +1,8 @@
 <template>
     <div>
+        <b-modal size="lg" v-model="modalEstado" ok-only @hide="getDadosEstado">
+            estado add aqui
+        </b-modal>
         <div class="card-header mb-3">
             <h4> Cadastro de OS</h4>
         </div>
@@ -17,6 +20,14 @@
                     type="text" placeholder="Serviço" v-model="obj.description" trim >
                 </b-form-input>
             </b-input-group>
+        </b-form-group>
+        <b-form-group label="Estado:" :state=estadoOK class="mr-5">
+            <b-input-group>
+                <b-form-select class="mr-2" :state=estadoOK v-model="obj.estado" :options="estado" ></b-form-select>
+                <b-button @click="modalEstado=true" variant='primary'>
+                    <b-icon icon='plus'></b-icon>
+                </b-button>
+            </b-input-group>           
         </b-form-group>
         
         <b-form-group class="mt-3 pt-3" >
@@ -63,12 +74,20 @@ export default {
           'msg':''
         },
         modalVisible:false,
+        modalEstado:false,
         erroMsg : '',
         espera:false,
         falha: false,
-        obj:{'name':'','description':''}
+        obj:{'name':'','description':'','estado':0},
+        estado:[],
+        objEstado:[],
+
     }
-  },computed:{
+  },
+  created(){
+    this.getDadosEstado()
+  },
+  computed:{
     ...mapGetters(['getDominio','getToken']),
     clienteOK(){
         if(this.obj.name.length>0){return true}
@@ -78,8 +97,16 @@ export default {
         if(this.obj.description.length>0){return true}
         else{return false}
     },
+    estadoOK(){
+        try{
+        if(this.obj.estado>0){return true}
+        else{return false}
+        }catch{
+          return false
+        }
+    },
     podeCadastrar(){
-        if (this.clienteOK && this.serviceOK){ return true}
+        if (this.clienteOK && this.serviceOK && this.estadoOK){ return true}
         else{ return false}
     }
   },methods:{
@@ -95,14 +122,32 @@ export default {
       this.obj = {'name':'','description':''}
     },
     dataFormat(){
-            //const form = document.getElementById('img')
-            //const file = form.files[0]
-            const formdata = new FormData()
-            //if(file!==undefined){formdata.append('img',file,file.name)}
-            //if(this.obj.id!==undefined){formdata.append('id',this.obj.id)}
-            formdata.append('name',this.obj.name)
-            formdata.append('description',this.obj.description)
-            return formdata
+      var estado = {}
+      this.objEstado.forEach(x => {
+             if(x.id == this.obj.estado){
+               estado = x
+             }})
+      var valor ={
+                'name':this.obj.name,
+                'description':this.obj.description,
+                'state':estado
+              }
+      return JSON.stringify(valor)
+           ////const form = document.getElementById('img')
+           ////const file = form.files[0]
+           //const formdata = new FormData()
+           ////if(file!==undefined){formdata.append('img',file,file.name)}
+           ////if(this.obj.id!==undefined){formdata.append('id',this.obj.id)}
+           //formdata.append('name',this.obj.name)
+           //formdata.append('description',this.obj.description)
+           ////formdata.append('state',this.obj.estado)
+           //this.objEstado.forEach(x => {
+           //  if(x.id == this.obj.estado){
+           //    formdata.append('state',JSON.stringify(x))
+           //    //formdata.append('state',x)
+           //  }
+           //});
+           //return formdata
     },
     async postDadosOS(){
         this.espera=true
@@ -111,7 +156,8 @@ export default {
           const response = await fetch(`${this.getDominio}/api/os/`,{
             method:"POST",
             headers:{
-            'Authorization': `Token ${this.getToken}`
+            'Authorization': `Token ${this.getToken}`,
+            'Content-Type': 'application/json'
           },body:this.dataFormat()
         })
         if(response.ok){
@@ -133,7 +179,38 @@ export default {
         this.espera = false
       }
        
-    }
+    },
+    async getDadosEstado(){
+      try{
+        this.esperandoDados = true
+          const response = await fetch(`${this.getDominio}/api/os/estado/`,{
+          headers:{
+            'Authorization': `Token ${this.getToken}`
+          }
+        })
+        if(response.ok){
+          const data = await response.json()
+          this.esperandoDados = false
+          this.objEstado = data
+          for(var x=0 ; x< data.length; x++){
+                    this.estado.push({'value':data[x].id,'text':data[x].name})
+          }
+        }else{
+          switch(response.status){
+            case 401:
+              throw new Error('Não Autorizado');
+            case 404:
+              throw new Error('Não Encontrado');
+            default:
+              throw new Error('Falha interna no Servidor');
+          }
+        }
+      }catch(error){
+        this.alertaFalha.msg= error
+        this.alertaFalha.time= this.alertaFalha.startTime
+        this.esperandoDados = false
+      }
+    },
 
   }
 

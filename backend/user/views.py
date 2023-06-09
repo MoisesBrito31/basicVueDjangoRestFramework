@@ -2,7 +2,6 @@ from rest_framework.decorators import api_view, authentication_classes, permissi
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from .models import Usuario
 from .serializer import UsuarioSerializer
 
 @api_view(['GET'])

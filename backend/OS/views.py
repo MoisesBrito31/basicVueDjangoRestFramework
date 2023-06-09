@@ -7,6 +7,7 @@ from rest_framework.response import Response
 from .serializer import OsSerializer, EstadoSerializer
 from .models import OS, Estado
 from time import sleep
+import json
 
 
 class indexView(View):
@@ -26,7 +27,8 @@ class OsList(APIView):
         serial = OsSerializer(queryset,many=True)
         return Response(serial.data)
     def post(self,request):
-        serial = OsSerializer(data=request.data)
+        print(json.dumps(request.data))
+        serial = OsSerializer(data=json.dumps(request.data))
         if serial.is_valid():
             serial.save()
             return Response(serial.data, status=status.HTTP_201_CREATED)
