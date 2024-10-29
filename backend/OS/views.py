@@ -4,6 +4,7 @@ from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.parsers import JSONParser
 from .serializer import OsSerializer, EstadoSerializer
 from .models import OS, Estado
 from time import sleep
@@ -27,12 +28,15 @@ class OsList(APIView):
         serial = OsSerializer(queryset,many=True)
         return Response(serial.data)
     def post(self,request):
-        print(json.dumps(request.data))
-        serial = OsSerializer(data=json.dumps(request.data))
-        if serial.is_valid():
-            serial.save()
-            return Response(serial.data, status=status.HTTP_201_CREATED)
-        return Response(serial.errors, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        try:
+            nome = request.data['name']
+            desc = request.data['description']
+            st_id = int(request.data['state']['id'])
+            st = Estado.objects.get(id=st_id)
+            OS.objects.create(name=nome,description=desc,state=st)
+            return Response('ok', status=status.HTTP_201_CREATED)
+        except Exception as EX:
+            return Response(str(EX), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 class OsDetail(APIView):  
@@ -45,12 +49,16 @@ class OsDetail(APIView):
         except Exception as EX:
             return Response(str(EX),status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     def post(self,request,pk):
-        obj = OS.objects.get(id=pk)
-        serial = OsSerializer(obj,data=request.data)
-        if serial.is_valid():
-            serial.save()
-            return Response(serial.data, status=status.HTTP_201_CREATED)
-        return Response(serial.errors, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        try:
+            obj = OS.objects.get(id=pk)
+            obj.name = request.data['name']
+            obj.description = request.data['description']
+            st_id = int(request.data['state']['id'])
+            obj.state = Estado.objects.get(id=st_id)
+            obj.save()
+            return Response('ok', status=status.HTTP_201_CREATED)
+        except Exception as EX:        
+            return Response(str(EX), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     def delete(self, request, pk):
         try:
             obj = OS.objects.get(id=pk)

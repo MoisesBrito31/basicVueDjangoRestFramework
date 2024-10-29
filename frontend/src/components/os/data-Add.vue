@@ -1,7 +1,8 @@
 <template>
     <div>
         <b-modal size="lg" v-model="modalEstado" ok-only @hide="getDadosEstado">
-            estado add aqui
+            <!--estado add aqui-->
+            <EstadoDataAdd></EstadoDataAdd>
         </b-modal>
         <div class="card-header mb-3">
             <h4> Cadastro de OS</h4>
@@ -64,8 +65,12 @@
 
 <script lang="js">
 import { mapGetters } from 'vuex'
+import EstadoDataAdd from '@/components/estado/data-Add.vue'
 export default {
   name: 'data-Add',
+  components:{
+    EstadoDataAdd,
+  },
   data(){
     return{
         alertaFalha:{
@@ -122,17 +127,17 @@ export default {
       this.obj = {'name':'','description':''}
     },
     dataFormat(){
-      var estado = {}
-      this.objEstado.forEach(x => {
-             if(x.id == this.obj.estado){
-               estado = x
-             }})
-      var valor ={
-                'name':this.obj.name,
-                'description':this.obj.description,
-                'state':estado
-              }
-      return JSON.stringify(valor)
+      const formdata = new FormData()
+      formdata.append('name',this.obj.name)
+      formdata.append('description',this.obj.description)
+      formdata.append('state',this.obj.estado)
+      //var estado = {}
+      //this.objEstado.forEach(x => {
+      //       if(x.id == this.obj.estado){
+      //         estado = x
+      //       }})
+      return formdata
+      //return JSON.stringify(valor)
            ////const form = document.getElementById('img')
            ////const file = form.files[0]
            //const formdata = new FormData()
@@ -156,8 +161,7 @@ export default {
           const response = await fetch(`${this.getDominio}/api/os/`,{
             method:"POST",
             headers:{
-            'Authorization': `Token ${this.getToken}`,
-            'Content-Type': 'application/json'
+            'Authorization': `Token ${this.getToken}`
           },body:this.dataFormat()
         })
         if(response.ok){
@@ -192,6 +196,7 @@ export default {
           const data = await response.json()
           this.esperandoDados = false
           this.objEstado = data
+          this.estado = []
           for(var x=0 ; x< data.length; x++){
                     this.estado.push({'value':data[x].id,'text':data[x].name})
           }
