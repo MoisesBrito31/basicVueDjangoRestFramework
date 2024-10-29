@@ -53,7 +53,7 @@ class OsDetail(APIView):
             obj = OS.objects.get(id=pk)
             obj.name = request.data['name']
             obj.description = request.data['description']
-            st_id = int(request.data['state']['id'])
+            st_id = int(request.data['state'])
             obj.state = Estado.objects.get(id=st_id)
             obj.save()
             return Response('ok', status=status.HTTP_201_CREATED)
