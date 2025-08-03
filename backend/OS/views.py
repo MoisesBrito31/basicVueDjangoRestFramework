@@ -31,7 +31,7 @@ class OsList(APIView):
         try:
             nome = request.data['name']
             desc = request.data['description']
-            st_id = int(request.data['state']['id'])
+            st_id = int(request.data['state'])
             st = Estado.objects.get(id=st_id)
             OS.objects.create(name=nome,description=desc,state=st)
             return Response('ok', status=status.HTTP_201_CREATED)
